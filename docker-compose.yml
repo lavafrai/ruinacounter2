@@ -9,7 +9,7 @@ services:
     environment:
       STATUS_FILE: /data/status.json
     ports:
-      - "127.0.0.1:11488:11488"
+      - "11488:11488"
     volumes:
       - ruinacounter2_data:/data
     restart: unless-stopped
