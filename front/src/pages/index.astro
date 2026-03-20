@@ -1,0 +1,157 @@
+---
+import "../styles/global.css";
+
+import Footer from '../components/Footer.astro';
+import Card from '../components/Card.astro';
+
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+		<title>Ruina Counter</title>
+		<script>
+			const response = await fetch('/status')
+						.then((response) => {
+							if (!response.ok) {
+								throw new Error(`HTTP error! Status: ${response.status}`);
+							}
+							return response
+						});
+			const data = await response.json();
+
+			document.getElementById("header")!.textContent = formatDaysSince(data?.last_detected_online)
+			document.getElementById("duration")!.textContent = Math.floor(data?.offline_highscore.duration.secs/(60*60*24))
+			document.getElementById("start_time")!.textContent = new Date(data?.offline_highscore.start_time).toLocaleDateString()
+			document.getElementById("end_time")!.textContent = new Date(data?.offline_highscore.end_time).toLocaleDateString()
+
+			function formatDaysSince(date: string) {
+				return Math.floor((Date.now() - Date.parse(date))/(1000*60*60*24))
+			}
+		</script>
+	</head>
+	<body>
+		<div style="z-index: 1; position: relative; min-height: calc(100vh - 90px); padding-top: 2rem;">
+			<h1 class="header text-center"><span id="header">...</span>&nbsp;дней без стримов <a href="https://twitch.tv/zakvielchannel">Заквиеля</a></h1>
+			<h2 class="record text-center">Рекорд -&nbsp;<span id="duration">...</span>&nbsp;дней (С&nbsp;<span id="start_time">...</span>&nbsp;по&nbsp;<span id="end_time">...</span>)</h2>
+			<div class="cards centered">
+				<Card
+					text="Мои поздравления! Вы успешно продержались столько дней без стримов от нашего любимого руины. Кажется, вы достигли нового рекорда по выдержке! Скажите спасибо что стример заботится о вас не давая вам смотреть стримы круглосуточно!"
+					image="image1.jpg"
+				/>
+				<Card
+					text="Надеемся, что ваши нервы не пострадали от отсутствия онлайн-развлечений. Но не волнуйтесь, наш бесстрашный стример скоро вернется в строй и подарит вам море эмоций и захватывающих моментов на его потоке."
+					image="image2.jpg"
+				/>
+				<Card
+					text="Сохраняйте свою стойкость и заглядывайте на сайт каждый день, чтобы быть в курсе, когда же наш любимец вернется к вам с новыми стримами. А пока, можете наслаждаться реальной жизнью и трогать траву!"
+					image="image3.png"
+				/>
+			</div>
+		</div>
+		<Footer/>
+		<div class="bg">
+			<div class="ball-x">
+				<div class="ball" style="background: radial-gradient(circle, oklch(55.8% 0.288 302.321) 30%, rgba(255, 255, 255, 0) 95%);"></div>
+			</div>
+			<div class="ball-x">
+				<div class="ball" style="background: radial-gradient(circle, oklch(50.5% 0.213 27.518) 90%, rgba(255, 255, 255, 0) 95%);"></div>
+			</div>
+		</div>
+	</body>
+
+	<style>
+		body {
+			width: 100%;
+			font-family: "Montserrat", system-ui, sans-serif;
+			font-weight: 600;
+			line-height: 1.4;
+			background: #222222;
+		}
+		a {
+			text-decoration: underline;
+			color: #e6a7ff !important; 
+		}
+		h1, h2, h3, a, p, span {
+			color: #fff;
+		    white-space: normal
+		}
+		.centered {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+		}
+		.header {
+			font-size: 3.2rem;
+			gap: 0.5rem;
+			align-items: center;
+		}
+		.header a {
+			color: #fff;
+		}
+		.record {
+			font-size: 2rem;
+			margin-top: 1rem;
+		}
+		.cards {
+			flex-wrap: wrap;
+			gap: 8rem;
+			margin-top: 7rem;
+		}
+
+		.bg {
+			overflow: hidden;
+			position: absolute;
+			filter: blur(100px);
+			inset: 0;
+			z-index: -1;
+		}
+		.ball-x {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			animation: floatX 14s ease-in-out infinite;
+		}
+		.ball-x:nth-child(2) {
+			animation-delay: -3.5s;
+		}
+		.ball {
+			opacity: 80%;
+			border-radius: 50%;
+			width: 300px;
+			height: 300px;
+			margin-left: -100px;
+			margin-top: -100px;
+			animation: floatY 10s ease-in-out infinite;
+		}
+		.ball-x:nth-child(2) .ball {
+			animation-duration: 7s;
+			animation-delay: -5s;
+		}
+
+		@keyframes floatX {
+			0%   { transform: translateX(-25vw); }
+			50%  { transform: translateX(25vw); }
+			100% { transform: translateX(-25vw); }
+		}
+		@keyframes floatY {
+			0%   { transform: translateY(-20vh); }
+			50%  { transform: translateY(20vh); }
+			100% { transform: translateY(-20vh); }
+		}
+
+		@media (max-width: 960px) {
+			.header {font-size: 2rem;}
+			.record {font-size: 1.5rem;}
+			.cards {gap: 3rem; margin-top: 2rem;}
+		}
+	</style>
+</html>

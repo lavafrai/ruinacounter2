@@ -1,0 +1,8 @@
+.git
+.idea
+target
+status.json
+.env
+front/node_modules
+front/dist
+front/.astro

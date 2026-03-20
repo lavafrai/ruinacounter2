@@ -1,0 +1,4 @@
+/target
+.env
+/status.json
+.idea

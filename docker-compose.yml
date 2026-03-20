@@ -1,0 +1,17 @@
+services:
+  ruinacounter2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      STATUS_FILE: /data/status.json
+    ports:
+      - "127.0.0.1:11488:11488"
+    volumes:
+      - ruinacounter2_data:/data
+    restart: unless-stopped
+
+volumes:
+  ruinacounter2_data:
