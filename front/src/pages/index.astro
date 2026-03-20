@@ -27,19 +27,33 @@ import Card from '../components/Card.astro';
 			const data = await response.json();
 
 			document.getElementById("header")!.textContent = formatDaysSince(data?.last_detected_online)
+			document.querySelector('.header #days')!.textContent = declOfNum(formatDaysSince(data?.last_detected_online), ["день", "дня", "дней"])
+
 			document.getElementById("duration")!.textContent = Math.floor(data?.offline_highscore.duration.secs/(60*60*24))
+			document.querySelector('.record #days')!.textContent = declOfNum(Math.floor(data?.offline_highscore.duration.secs/(60*60*24)), ["день", "дня", "дней"])
+
 			document.getElementById("start_time")!.textContent = new Date(data?.offline_highscore.start_time).toLocaleDateString()
 			document.getElementById("end_time")!.textContent = new Date(data?.offline_highscore.end_time).toLocaleDateString()
 
+			if (data?.is_online) {
+				document.getElementById("streaming")!.classList.remove("hidden")
+				document.getElementById("offline")!.classList.add("hidden")
+			}
+
 			function formatDaysSince(date: string) {
 				return Math.floor((Date.now() - Date.parse(date))/(1000*60*60*24))
+			}
+
+			function declOfNum(number: number, words: Array<String>) {
+				return words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][Math.min(number % 10, 5)]];
 			}
 		</script>
 	</head>
 	<body>
 		<div style="z-index: 1; position: relative; min-height: calc(100vh - 90px); padding-top: 2rem;">
-			<h1 class="header text-center"><span id="header">...</span>&nbsp;дней без стримов <a href="https://twitch.tv/zakvielchannel">Заквиеля</a></h1>
-			<h2 class="record text-center">Рекорд -&nbsp;<span id="duration">...</span>&nbsp;дней (С&nbsp;<span id="start_time">...</span>&nbsp;по&nbsp;<span id="end_time">...</span>)</h2>
+			<h1 class="header text-center hidden" id="streaming">🔴 <a href="https://twitch.tv/zakvielchannel">Заквиель</a> Сейчас стримит</h1>
+			<h1 class="header text-center" id="offline"><span id="header">...</span>&nbsp;<span id="days"></span> без стримов <a href="https://twitch.tv/zakvielchannel">Заквиеля</a></h1>
+			<h2 class="record text-center">Рекорд -&nbsp;<span id="duration">...</span>&nbsp;<span id="days"></span> (С&nbsp;<span id="start_time">...</span>&nbsp;по&nbsp;<span id="end_time">...</span>)</h2>
 			<div class="cards centered">
 				<Card
 					text="Мои поздравления! Вы успешно продержались столько дней без стримов от нашего любимого руины. Кажется, вы достигли нового рекорда по выдержке! Скажите спасибо что стример заботится о вас не давая вам смотреть стримы круглосуточно!"

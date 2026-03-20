@@ -12,8 +12,15 @@ export default defineConfig({
           // Options for PNG, JPEG, SVG, WebP, AVIF
           png: {quality: 80},
           jpeg: {quality: 75},
-          // ...
         }),
-    ]
+    ],
+    server: {
+      proxy: {
+        '/status': {
+          target: 'https://ruina.lavafrai.ru',
+          changeOrigin: true,
+        },
+      },
+    }
   }
 });
