@@ -48,6 +48,20 @@ import Card from '../components/Card.astro';
 				return words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][Math.min(number % 10, 5)]];
 			}
 		</script>
+
+		<script is:inline data-astro-rerun type="text/javascript">
+		  (() => {
+		    const name = 'outbound-link-click';
+		    document.querySelectorAll('a').forEach(a => {
+		      if (a.host !== window.location.host && !a.getAttribute('data-umami-event')) {
+		        a.setAttribute('data-umami-event', name);
+		        a.setAttribute('data-umami-event-url', a.href);
+		      }
+		    });
+		  })();
+		</script>
+
+		<script async is:inline data-astro-rerun src="https://analytics.artembay.ru/script.js" data-website-id="eb4f9527-c511-40a9-bfca-107fa3964a3e"></script>
 	</head>
 	<body>
 		<div style="z-index: 1; position: relative; min-height: calc(100vh - 90px); padding-top: 2rem;">
